@@ -3,6 +3,7 @@
 
 //todo z tym ifdefem czy extern przy kazdej?
 //todo https://isocpp.org/wiki/faq/mixing-c-and-cpp#include-c-hdrs-personal
+
 #ifdef __cplusplus
 extern "C" {
 #endif

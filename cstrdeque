@@ -1,6 +1,8 @@
 #ifndef CSTRDEQUE
 #define CSTRDEQUE
 
+#include <cstddef> //todo is it required for size_t to not throw error?
+
 namespace jnp1 {
 
     void strdeque_delete(unsigned long id);

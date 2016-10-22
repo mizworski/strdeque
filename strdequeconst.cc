@@ -1,9 +1,10 @@
 //
 // Created by michal on 10/22/16.
 //
+#include <cstddef> //todo wtf?
 
+#include "strdeque.h"
 #include "strdequeconst.h"
-#include "cstrdeque"
 
 unsigned long& emptystrdeque_id()
 {
@@ -20,7 +21,7 @@ bool& emptystrdeque_initialized()
 unsigned long emptystrdeque() {
     if (!emptystrdeque_initialized()) {
         emptystrdeque_initialized() = true;
-        emptystrdeque_id() = jnp1::strdeque_new();
+        emptystrdeque_id() = strdeque_new();
     }
 
     return emptystrdeque_id();

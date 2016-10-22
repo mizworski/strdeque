@@ -1,10 +1,10 @@
 #include <deque>
 #include <queue>
 #include <map>
+#include <cstddef> //todo is it required for size_t to not throw error?
+
 #include "strdeque.h"
 #include "strdequeconst.h"
-#include "cstrdeque"
-#include "cstrdequeconst"
 
 typedef std::deque<std::string> strdeque;
 typedef std::map<unsigned long, strdeque> strdeques;
