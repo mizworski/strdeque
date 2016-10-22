@@ -1,7 +1,3 @@
-//
-// Created by michal on 10/22/16.
-//
-
 #ifndef ZADANIE2_STRDEQUECONST_H
 #define ZADANIE2_STRDEQUECONST_H
 

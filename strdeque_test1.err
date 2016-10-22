@@ -19,6 +19,7 @@ emptystrdeque()
 emptystrdeque()
 strdeque_insert_at: deque 0, element "aa" inserted at 1
 emptystrdeque()
+emptystrdeque()
 strdeque_get_at(0, 1)
 emptystrdeque()
 strdeque_get_at: deque 0, element at 1 is "aa"

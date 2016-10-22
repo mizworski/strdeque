@@ -2,6 +2,9 @@
 #include <queue>
 #include <map>
 #include "strdeque.h"
+#include "strdequeconst.h"
+#include "cstrdeque"
+#include "cstrdequeconst"
 
 typedef std::deque<std::string> strdeque;
 typedef std::map<unsigned long, strdeque> strdeques;
@@ -29,15 +32,26 @@ unsigned long strdeque_new() {
 }
 
 void strdeque_delete(unsigned long id) {
-    unsigned long elements_erased = strdeques.erase(id);
+    if (id == emptystrdeque()) {
+        // todo print error
+    } else {
+        unsigned long elements_erased = strdeques().erase(id);
 
-    if (elements_erased > 0) {
-        free_indices.push(id);
+        if (elements_erased > 0) {
+            free_indices.push(id);
+        }
     }
 }
 
 size_t strdeque_size(unsigned long id) {
-    return deques.size();
+    size_t ret_val = 0;
+    strdeques::iterator it = deques.find(id);
+
+    if (it != deques.end()) {
+        ret_val = it->second.size();
+    }
+
+    return ret_val;
 }
 
 void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
@@ -46,7 +60,9 @@ void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
 
         if (it != deques.end()) {
             strdeque deque = it->second;
-            if (pos < deque.size()) { //todo deque.size() is unsigned long
+            if (it->first == emptystrdeque()) {
+                // todo print error
+            } else if (pos < deque.size()) { //todo deque.size() is unsigned long
                 deque.insert(deque.begin() + pos, value); //todo to check
             } else {
                 deque.push_back(value);
@@ -60,7 +76,9 @@ void strdeque_remove_at(unsigned long id, size_t pos) {
 
     if (it != deques.end()) {
         strdeque deque = it->second;
-        if (pos < deque.size()) {
+        if (it->first == emptystrdeque()) {
+            // todo print error
+        } else if (pos < deque.size()) {
             deque.erase(deque.begin() + pos);
         }
     }
@@ -84,7 +102,11 @@ void strdeque_clear(unsigned long id) {
     strdeques::iterator it = deques.find(id);
 
     if (it != deques.end()) {
-        it->second.clear();
+        if (it->first == emptystrdeque()) {
+            // todo print error
+        } else {
+            it->second.clear();
+        }
     }
 }
 
@@ -96,8 +118,8 @@ int strdeque_comp(unsigned long id1, unsigned long id2) {
     strdeques::iterator dequeues_it1 = deques.find(id1);
     strdeques::iterator dequeues_it2 = deques.find(id2);
 
-    strdeque deque1 = nullptr;
-    strdeque deque2 = nullptr;
+    strdeque deque1;
+    strdeque deque2;
 
     if (dequeues_it1 != deques.end()) {
         deque1 = dequeues_it1->second;
@@ -106,11 +128,11 @@ int strdeque_comp(unsigned long id1, unsigned long id2) {
         deque2 = dequeues_it2->second;
     }
 
-    if (dequeues_it1 == nullptr && dequeues_it2 == nullptr) {
+    if (dequeues_it1 == deques.end() && dequeues_it2 == deques.end()) {
         return equal;
-    } else if (dequeues_it1 == nullptr && dequeues_it2 != nullptr) {
+    } else if (dequeues_it1 == deques.end() && dequeues_it2 != deques.end()) {
         return lesser;
-    } else if (dequeues_it1 != nullptr && dequeues_it2 == nullptr) {
+    } else if (dequeues_it1 != deques.end() && dequeues_it2 == deques.end()) {
         return greater;
     }
 

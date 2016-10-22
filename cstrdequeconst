@@ -1,0 +1,10 @@
+#ifndef CSTRDEQUECONST
+#define CSTRDEQUECONST
+
+namespace jnp1 {
+
+    unsigned long emptystrdeque();
+
+}
+
+#endif
