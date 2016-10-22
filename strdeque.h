@@ -1,15 +1,17 @@
-//
-// Created by michal on 10/22/16.
-//
-
 #ifndef ZADANIE2_STRDEQUE_H
 #define ZADANIE2_STRDEQUE_H
+
+//todo z tym ifdefem czy extern przy kazdej?
+//todo https://isocpp.org/wiki/faq/mixing-c-and-cpp#include-c-hdrs-personal
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * Creates new, empty, double-ended queue of strings.
  * @return identifier of queue.
  */
-extern "C" unsigned long strdeque_new();
+unsigned long strdeque_new();
 
 /**
  * Removes queue with specified id if such exists.
@@ -70,5 +72,10 @@ void strdeque_clear(unsigned long id);
  * 1 otherwiste.
  */
 int strdeque_comp(unsigned long id1, unsigned long id2);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif //ZADANIE2_STRDEQUE_H
