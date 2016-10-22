@@ -9,7 +9,7 @@
  * Creates new, empty, double-ended queue of strings.
  * @return identifier of queue.
  */
-unsigned long strdeque_new();
+extern "C" unsigned long strdeque_new();
 
 /**
  * Removes queue with specified id if such exists.
