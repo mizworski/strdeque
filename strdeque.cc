@@ -1,7 +1,10 @@
+
+#include <string>
 #include <deque>
 #include <queue>
 #include <map>
 #include <cstddef> //todo is it required for size_t to not throw error?
+#include <iostream>
 
 #include "strdeque.h"
 #include "strdequeconst.h"
@@ -35,8 +38,7 @@ void strdeque_delete(unsigned long id) {
     if (id == emptystrdeque()) {
         // todo print error
     } else {
-        unsigned long elements_erased = strdeques().erase(id);
-
+        unsigned long elements_erased = deques.erase(id);
         if (elements_erased > 0) {
             free_indices.push(id);
         }
@@ -56,16 +58,17 @@ size_t strdeque_size(unsigned long id) {
 
 void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
     if (value != nullptr) {
+        std::string str(value);
         strdeques::iterator it = deques.find(id);
 
         if (it != deques.end()) {
-            strdeque deque = it->second;
+            strdeque &deque = it->second;
             if (it->first == emptystrdeque()) {
                 // todo print error
             } else if (pos < deque.size()) { //todo deque.size() is unsigned long
-                deque.insert(deque.begin() + pos, value); //todo to check
+                deque.insert(deque.begin() + pos, str); //todo to check
             } else {
-                deque.push_back(value);
+                deque.push_back(str);
             }
         }
     }
@@ -75,7 +78,7 @@ void strdeque_remove_at(unsigned long id, size_t pos) {
     strdeques::iterator it = deques.find(id);
 
     if (it != deques.end()) {
-        strdeque deque = it->second;
+        strdeque &deque = it->second;
         if (it->first == emptystrdeque()) {
             // todo print error
         } else if (pos < deque.size()) {
@@ -130,9 +133,9 @@ int strdeque_comp(unsigned long id1, unsigned long id2) {
 
     if (dequeues_it1 == deques.end() && dequeues_it2 == deques.end()) {
         return equal;
-    } else if (dequeues_it1 == deques.end() && dequeues_it2 != deques.end()) {
+    } else if (dequeues_it1 == deques.end() && dequeues_it2 != deques.end() && id2 != emptystrdeque()) {
         return lesser;
-    } else if (dequeues_it1 != deques.end() && dequeues_it2 == deques.end()) {
+    } else if (dequeues_it1 != deques.end() && dequeues_it2 == deques.end() && id1 != emptystrdeque()) {
         return greater;
     }
 
