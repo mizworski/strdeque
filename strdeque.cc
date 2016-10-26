@@ -9,6 +9,16 @@
 #include "strdeque.h"
 #include "strdequeconst.h"
 
+#ifndef NDEBUG
+static const bool debug() {
+  return false;
+}
+#else
+static const bool debug() {
+  return true;
+}
+#endif
+
 typedef std::deque<std::string> strdeque;
 typedef std::map<unsigned long, strdeque> strdeques;
 typedef std::queue<unsigned long> lld_queue;
@@ -21,9 +31,22 @@ static strdeques &deques() {
 unsigned long current_index = 0;
 lld_queue free_indices;
 
+static std::ostream& write_to_cerr() {
+  static std::ios_base::Init init;
+  return std::cerr;
+}
+
+static void write_error(std::string message) {
+  if (debug()) {
+    write_to_cerr() << message << "\n";
+  }
+}
+
 unsigned long strdeque_new() {
     unsigned long index;
     strdeque deque;
+
+    write_error("strdeque_new()");
 
     if (free_indices.empty()) {
         index = current_index++;
@@ -33,6 +56,8 @@ unsigned long strdeque_new() {
         free_indices.pop();
         deques().insert(std::pair<unsigned long, strdeque>(index, deque));
     }
+
+    write_error("strdeque_new: deque " + std::to_string(index) + " created");
 
     return index;
 }
@@ -60,6 +85,9 @@ size_t strdeque_size(unsigned long id) {
 }
 
 void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
+    write_error("strdeque_insert_at("+std::to_string(id) + ", " + std::to_string((int) pos) +
+      ", \"" + ((value != NULL) ? value : "NULL") + "\")");
+
     if (value != nullptr) {
         std::string str(value);
         strdeques::iterator it = deques().find(id);
@@ -70,14 +98,26 @@ void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
                 // todo print error
             } else if (pos < deque.size()) { //todo deque.size() is unsigned long
                 deque.insert(deque.begin() + pos, str); //todo to check
+                write_error("strdeque_insert_at: deque " + std::to_string(id) +
+                  " element \"" + value + "\" inserted at "+ std::to_string((int) pos));
             } else {
                 deque.push_back(str);
+                write_error("strdeque_insert_at: deque " + std::to_string(id) +
+                  " element \"" + value + "\" inserted at "+ std::to_string((int) pos));
             }
+        } else {
+            write_error("strdeque_insert_at: deque " + std::to_string(id)
+              + " does not exist");
         }
+    } else {
+      write_error("strdeque_insert_at: attempt to insert NULL into a deque");
     }
 }
 
 void strdeque_remove_at(unsigned long id, size_t pos) {
+    write_error("strdeque_remove_at("+std::to_string(id) + ", " +
+      std::to_string((int) pos) + ")");
+
     strdeques::iterator it = deques().find(id);
 
     if (it != deques().end()) {
@@ -86,11 +126,23 @@ void strdeque_remove_at(unsigned long id, size_t pos) {
             // todo print error
         } else if (pos < deque.size()) {
             deque.erase(deque.begin() + pos);
+
+            write_error("strdeque_remove_at: deque " + std::to_string(id) +
+              " element at "+ std::to_string((int) pos) + " removed");
+        } else {
+            write_error("strdeque_remove_at: deque " + std::to_string(id) +
+              " does not contain an element at " + std::to_string((int) pos));
         }
+    } else {
+      write_error("strdeque_remove_at: deque " + std::to_string(id)
+        + " does not exist");
     }
 }
 
 const char *strdeque_get_at(unsigned long id, size_t pos) {
+    write_error("strdeque_get_at("+std::to_string(id) + ", " +
+      std::to_string((int) pos) + ")");
+
     const char *ret_val = nullptr;
     strdeques::iterator it = deques().find(id);
 
@@ -98,7 +150,17 @@ const char *strdeque_get_at(unsigned long id, size_t pos) {
         strdeque deque = it->second;
         if (pos < deque.size()) {
             ret_val = deque.at(pos).c_str();
+
+            write_error("strdeque_get_at: deque " + std::to_string(id)
+              + ", element at" + std::to_string((int) pos) + " is \""
+              + ((ret_val != NULL) ? ret_val : "NULL") + "\"");
+        } else {
+            write_error("strdeque_get_at: deque " + std::to_string(id)
+              + " does not contain an element at " + std::to_string((int) pos));
         }
+    } else {
+      write_error("strdeque_get_at: deque " + std::to_string(id)
+        + " does not exist");
     }
 
     return ret_val;
