@@ -36,7 +36,7 @@ size_t strdeque_size(unsigned long id);
  * @param pos position in front of which element is being inserted
  * @param value element that is being inserted
  */
-void strdeque_insert_at(unsigned long id, size_t pos, const char* value);
+void strdeque_insert_at(unsigned long id, size_t pos, const char *value);
 
 /**
  * Removes element at specified position from the queue
@@ -53,7 +53,7 @@ void strdeque_remove_at(unsigned long id, size_t pos);
  * @return pointer to element if queue exists and pos is not out of bounds.
  * Otherwise returns null
  */
-const char* strdeque_get_at(unsigned long id, size_t pos);
+const char *strdeque_get_at(unsigned long id, size_t pos);
 
 /**
  * Removes all elements from specified queue if such exists.

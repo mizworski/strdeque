@@ -6,14 +6,12 @@
 #include "strdeque.h"
 #include "strdequeconst.h"
 
-unsigned long& emptystrdeque_id()
-{
+unsigned long &emptystrdeque_id() {
     static unsigned long id = 0;
     return id;
 }
 
-bool& emptystrdeque_initialized()
-{
+static bool &emptystrdeque_initialized() {
     static bool initialized = false;
     return initialized;
 }

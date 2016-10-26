@@ -11,11 +11,14 @@
 
 typedef std::deque<std::string> strdeque;
 typedef std::map<unsigned long, strdeque> strdeques;
-//typedef std::pair<unsigned long, strdeque> map_entity;
 typedef std::queue<unsigned long> lld_queue;
 
+static strdeques &deques() {
+    static strdeques deques;
+    return deques;
+}
+
 unsigned long current_index = 0;
-strdeques deques;
 lld_queue free_indices;
 
 unsigned long strdeque_new() {
@@ -24,11 +27,11 @@ unsigned long strdeque_new() {
 
     if (free_indices.empty()) {
         index = current_index++;
-        deques.insert(std::pair<unsigned long, strdeque>(index, deque));
+        deques().insert(std::pair<unsigned long, strdeque>(index, deque));
     } else {
         index = free_indices.front();
         free_indices.pop();
-        deques.insert(std::pair<unsigned long, strdeque>(index, deque));
+        deques().insert(std::pair<unsigned long, strdeque>(index, deque));
     }
 
     return index;
@@ -38,7 +41,7 @@ void strdeque_delete(unsigned long id) {
     if (id == emptystrdeque()) {
         // todo print error
     } else {
-        unsigned long elements_erased = deques.erase(id);
+        unsigned long elements_erased = deques().erase(id);
         if (elements_erased > 0) {
             free_indices.push(id);
         }
@@ -47,9 +50,9 @@ void strdeque_delete(unsigned long id) {
 
 size_t strdeque_size(unsigned long id) {
     size_t ret_val = 0;
-    strdeques::iterator it = deques.find(id);
+    strdeques::iterator it = deques().find(id);
 
-    if (it != deques.end()) {
+    if (it != deques().end()) {
         ret_val = it->second.size();
     }
 
@@ -59,9 +62,9 @@ size_t strdeque_size(unsigned long id) {
 void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
     if (value != nullptr) {
         std::string str(value);
-        strdeques::iterator it = deques.find(id);
+        strdeques::iterator it = deques().find(id);
 
-        if (it != deques.end()) {
+        if (it != deques().end()) {
             strdeque &deque = it->second;
             if (it->first == emptystrdeque()) {
                 // todo print error
@@ -75,9 +78,9 @@ void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
 }
 
 void strdeque_remove_at(unsigned long id, size_t pos) {
-    strdeques::iterator it = deques.find(id);
+    strdeques::iterator it = deques().find(id);
 
-    if (it != deques.end()) {
+    if (it != deques().end()) {
         strdeque &deque = it->second;
         if (it->first == emptystrdeque()) {
             // todo print error
@@ -89,9 +92,9 @@ void strdeque_remove_at(unsigned long id, size_t pos) {
 
 const char *strdeque_get_at(unsigned long id, size_t pos) {
     const char *ret_val = nullptr;
-    strdeques::iterator it = deques.find(id);
+    strdeques::iterator it = deques().find(id);
 
-    if (it != deques.end()) {
+    if (it != deques().end()) {
         strdeque deque = it->second;
         if (pos < deque.size()) {
             ret_val = deque.at(pos).c_str();
@@ -102,9 +105,9 @@ const char *strdeque_get_at(unsigned long id, size_t pos) {
 }
 
 void strdeque_clear(unsigned long id) {
-    strdeques::iterator it = deques.find(id);
+    strdeques::iterator it = deques().find(id);
 
-    if (it != deques.end()) {
+    if (it != deques().end()) {
         if (it->first == emptystrdeque()) {
             // todo print error
         } else {
@@ -118,28 +121,28 @@ int strdeque_comp(unsigned long id1, unsigned long id2) {
     const int equal = 0;
     const int greater = 1;
 
-    strdeques::iterator dequeues_it1 = deques.find(id1);
-    strdeques::iterator dequeues_it2 = deques.find(id2);
+    strdeques::iterator dequeues_it1 = deques().find(id1);
+    strdeques::iterator dequeues_it2 = deques().find(id2);
 
     strdeque deque1;
     strdeque deque2;
 
-    if (dequeues_it1 != deques.end()) {
+    if (dequeues_it1 != deques().end()) {
         deque1 = dequeues_it1->second;
     }
-    if (dequeues_it2 != deques.end()) {
+    if (dequeues_it2 != deques().end()) {
         deque2 = dequeues_it2->second;
     }
 
-    if (dequeues_it1 == deques.end() && dequeues_it2 == deques.end()) {
+    if (dequeues_it1 == deques().end() && dequeues_it2 == deques().end()) {
         return equal;
-    } else if (dequeues_it1 == deques.end() && dequeues_it2 != deques.end() && id2 != emptystrdeque()) {
+    } else if (dequeues_it1 == deques().end() && dequeues_it2 != deques().end() && id2 != emptystrdeque()) {
         return lesser;
-    } else if (dequeues_it1 != deques.end() && dequeues_it2 == deques.end() && id1 != emptystrdeque()) {
+    } else if (dequeues_it1 != deques().end() && dequeues_it2 == deques().end() && id1 != emptystrdeque()) {
         return greater;
     }
 
-    // both deques exist.
+    // both deques() exist.
 
     strdeque::iterator it1 = deque1.begin();
     strdeque::iterator it2 = deque2.begin();
