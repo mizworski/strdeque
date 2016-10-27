@@ -1,9 +1,8 @@
-
 #include <string>
 #include <deque>
 #include <queue>
 #include <map>
-#include <cstddef> //todo is it required for size_t to not throw error?
+#include <cstddef>
 #include <iostream>
 
 #include "strdeque.h"
@@ -38,7 +37,7 @@ static std::ostream& write_to_cerr() {
 
 static void write_error(std::string message) {
   if (debug()) {
-    write_to_cerr() << message << "\n";
+    write_to_cerr() << message << std::endl;
   }
 }
 
@@ -112,8 +111,8 @@ void strdeque_insert_at(unsigned long id, size_t pos, const char *value) {
             strdeque &deque = it->second;
             if (it->first == emptystrdeque()) {
                 write_error("strdeque_insert_at: attempt to insert into the Empty Deque");
-            } else if (pos < deque.size()) { //todo deque.size() is unsigned long
-                deque.insert(deque.begin() + pos, str); //todo to check
+            } else if (pos < deque.size()) {
+                deque.insert(deque.begin() + pos, str);
                 write_error("strdeque_insert_at: deque " + id_string(id) +
                   " element \"" + value + "\" inserted at "+ std::to_string((int) pos));
             } else {
@@ -225,9 +224,11 @@ int strdeque_comp(unsigned long id1, unsigned long id2) {
 
     if (dequeues_it1 == deques().end() && dequeues_it2 == deques().end()) {
         return equal;
-    } else if (dequeues_it1 == deques().end() && dequeues_it2 != deques().end() && id2 != emptystrdeque()) {
+    } else if (dequeues_it1 == deques().end() && dequeues_it2 != deques().end()
+          && id2 != emptystrdeque()) {
         return lesser;
-    } else if (dequeues_it1 != deques().end() && dequeues_it2 == deques().end() && id1 != emptystrdeque()) {
+    } else if (dequeues_it1 != deques().end() && dequeues_it2 == deques().end()
+          && id1 != emptystrdeque()) {
         return greater;
     }
 

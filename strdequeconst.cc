@@ -1,7 +1,4 @@
-//
-// Created by michal on 10/22/16.
-//
-#include <cstddef> //todo wtf?
+#include <cstddef>
 #include <iostream>
 
 #include "strdeque.h"
@@ -24,7 +21,7 @@ static std::ostream& write_to_cerr() {
 
 static void write_error(std::string message) {
   if (debug()) {
-    write_to_cerr() << message << "\n";
+    write_to_cerr() << message << std::endl;
   }
 }
 
